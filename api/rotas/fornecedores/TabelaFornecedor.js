@@ -8,6 +8,7 @@ module.exports = {
         return Modelo.create(fornecedor)
     },
     async pegarPorId (id) {
+        //acessar o banco de dados para pegar o fornecedor
         const encontrado = await Modelo.findOne({
             where: {
                 id: id
