@@ -10,11 +10,12 @@ roteador.get('/', async (requisicao, resposta) => {
     )
 })
 
-roteador.post('/', async (requisicao, resposta) => {
+roteador.post('/', async (requisicao, resposta, proximo) => {
     try {
         const dadosRecebidos = requisicao.body
         const fornecedor = new Fornecedor(dadosRecebidos)
         await fornecedor.criar()
+        
         //quando o fornecedor consegue ser criado, ele é retornado 201
         resposta.status(201)
         resposta.send(
@@ -22,12 +23,7 @@ roteador.post('/', async (requisicao, resposta) => {
         )    
     } catch (erro) {
         //quando o fornecedor não consegue ser criado, ele é retornado 400
-        resposta.status(400)
-        resposta.send(
-            JSON.stringify({
-                message: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
@@ -51,7 +47,7 @@ roteador.get('/:idFornecedor', async (requisicao, resposta) => {
     }
 })
 
-roteador.put('/:idFornecedor', async (requisicao, resposta) => {
+roteador.put('/:idFornecedor', async (requisicao, resposta, proximo) => {
     try {
         const id = requisicao.params.idFornecedor
         const dadosRecebidos = requisicao.body
@@ -61,16 +57,11 @@ roteador.put('/:idFornecedor', async (requisicao, resposta) => {
         resposta.status(204)
         resposta.end()
     } catch (erro) {
-        resposta.status(400)
-        resposta.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
-roteador.delete('/:idFornecedor', async (requisicao, resposta) => {
+roteador.delete('/:idFornecedor', async (requisicao, resposta, proximo) => {
     try {
         const id = requisicao.params.idFornecedor
         const fornecedor = new Fornecedor({ id: id })
@@ -79,12 +70,7 @@ roteador.delete('/:idFornecedor', async (requisicao, resposta) => {
         resposta.status(204)
         resposta.end()
     } catch (erro) {
-        resposta.status(404)
-        resposta.send(
-            JSON.stringify({
-                mensagem: erro.message
-            })
-        )
+        proximo(erro)
     }
 })
 
