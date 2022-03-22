@@ -11,6 +11,7 @@ const SerializadorErro = require('./Serializador').SerializadorErro
 
 app.use(bodyParser.json())
 
+//verifica antes de qualquer rota se o formato requisitado é válido
 app.use((requisicao, resposta, proximo) => {
     let formatoRequisitado = requisicao.header('Accept')
 
