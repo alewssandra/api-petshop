@@ -22,7 +22,7 @@ class Serializador {
         this.camposPublicos.forEach((campo) => {
             //hasOwnPropety verifica se o objeto possui a propriedade
             if(dados.hasOwnProperty(campo)) {
-                novoObjeto[campo] = dados[campo]
+                novoObjeto[campo] = dados[campo] 
             }
         })
 
