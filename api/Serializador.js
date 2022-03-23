@@ -1,28 +1,48 @@
 const ValorNaoSuportado = require('./erros/ValorNaoSuportado')
+const jsontoxml = require('jsontoxml')
 
 class Serializador {
     json (dados) {
         return JSON.stringify(dados)
     }
 
-    serializar (dados) {
-        if (this.contentType === 'application/json') {
-            //se o formato requisitado for json, retorna o json
-            return this.json(
-                this.filtrar(dados)
-            )
+    xml (dados) {
+        let tag = this.tagSingular
+
+	//verifica se o objeto é um array
+        if (Array.isArray(dados)) {
+            tag = this.tagPlural
+            dados = dados.map((item) => {
+                return {
+                    [this.tagSingular]: item
+                }
+            })
         }
 
-        throw new ValorNaoSuportado(this.contentType);
+        return jsontoxml({ [tag]: dados })
+    }
+
+    serializar (dados) {
+        dados = this.filtrar(dados)
+
+        if (this.contentType === 'application/json') {
+           //se o formato requisitado for json, retorna o json
+            return this.json(dados)
+        }
+
+        if (this.contentType === 'application/xml') {
+            return this.xml(dados)
+        }
+
+        throw new ValorNaoSuportado(this.contentType)
     }
 
     filtrarObjeto (dados) {
         const novoObjeto = {}
 
         this.camposPublicos.forEach((campo) => {
-            //hasOwnPropety verifica se o objeto possui a propriedade
-            if(dados.hasOwnProperty(campo)) {
-                novoObjeto[campo] = dados[campo] 
+            if (dados.hasOwnProperty(campo)) {
+                novoObjeto[campo] = dados[campo]
             }
         })
 
@@ -33,11 +53,11 @@ class Serializador {
         if (Array.isArray(dados)) {
             dados = dados.map(item => {
                 return this.filtrarObjeto(item)
-            }) 
+            })
         } else {
             dados = this.filtrarObjeto(dados)
         }
- 
+
         return dados
     }
 }
@@ -51,17 +71,21 @@ class SerializadorFornecedor extends Serializador {
             'empresa',
             'categoria'
         ].concat(camposExtras || [])
+        this.tagSingular = 'fornecedor'
+        this.tagPlural = 'fornecedores'
     }
 }
 
 class SerializadorErro extends Serializador {
     constructor (contentType, camposExtras) {
-    super()
-    this.contentType = contentType
-    this.camposPublicos = [
-        'id',
-        'mensagem'
-    ].concat(camposExtras || [])
+        super()
+        this.contentType = contentType
+        this.camposPublicos = [
+            'id',
+            'mensagem'
+        ].concat(camposExtras || [])
+        this.tagSingular = 'erro'
+        this.tagPlural = 'erros'
     }
 }
 
@@ -70,4 +94,4 @@ module.exports = {
     SerializadorFornecedor: SerializadorFornecedor,
     SerializadorErro: SerializadorErro,
     formatosAceitos: ['application/json', 'application/xml']
-};
+}
