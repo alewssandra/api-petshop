@@ -81,6 +81,20 @@ roteador.delete('/:idFornecedor', async (requisicao, resposta, proximo) => {
 })
 
 const roteadorProdutos = require('./produtos')
-roteador.use('/:idFornecedor/produtos', roteadorProdutos)
+
+const verificarFornecedor = async (requisicao, resposta, proximo) => {
+    try {
+        const id = requisicao.params.idFornecedor
+        const fornecedor = new Fornecedor({ id: id })
+        await fornecedor.carregar()
+        //coloca valores dentro da requisição express, para que sejam passados para a próxima função
+        requisicao.fornecedor = fornecedor
+        proximo()
+    } catch (erro) {
+        proximo(erro)
+    }
+}
+
+roteador.use('/:idFornecedor/produtos', verificarFornecedor, roteadorProdutos)
 
 module.exports = roteador
