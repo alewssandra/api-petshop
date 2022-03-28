@@ -1,5 +1,5 @@
 const TabelaFornecedor = require('./TabelaFornecedor')
-const CampoInvalido = require('../../erros/CampoInvalido') 
+const CampoInvalido = require('../../erros/CampoInvalido')
 const DadosNaoFornecidos = require('../../erros/DadosNaoFornecidos')
 
 class Fornecedor {
@@ -50,7 +50,7 @@ class Fornecedor {
             }
         })
 
-        //verifica se existe algum campo para atualizar
+	//verifica se existe algum campo para atualizar
         if (Object.keys(dadosParaAtualizar).length === 0) {
             throw new DadosNaoFornecidos()
         }
@@ -65,14 +65,14 @@ class Fornecedor {
     validar () {
         const campos = ['empresa', 'email', 'categoria']
 
-        campos.forEach((campo) => {
+        campos.forEach(campo => {
             const valor = this[campo]
 
             if (typeof valor !== 'string' || valor.length === 0) {
                 throw new CampoInvalido(campo)
             }
-        }
-    )}
+        })
+    }
 }
 
 module.exports = Fornecedor

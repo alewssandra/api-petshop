@@ -26,7 +26,7 @@ class Serializador {
         dados = this.filtrar(dados)
 
         if (this.contentType === 'application/json') {
-           //se o formato requisitado for json, retorna o json
+         //se o formato requisitado for json, retorna o json
             return this.json(dados)
         }
 
@@ -82,7 +82,7 @@ class SerializadorProduto extends Serializador {
         this.contentType = contentType
         this.camposPublicos = [
             'id',
-            'titulo',
+            'titulo'
         ].concat(camposExtras || [])
         this.tagSingular = 'produto'
         this.tagPlural = 'produtos'

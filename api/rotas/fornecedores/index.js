@@ -26,11 +26,11 @@ roteador.post('/', async (requisicao, resposta, proximo) => {
             resposta.getHeader('Content-Type')
         )
         resposta.send(
-            //vai ser transformado em JSON
+        //vai ser transformado em JSON
             serializador.serializar(fornecedor)
-        )    
+        )
     } catch (erro) {
-        //quando o fornecedor não consegue ser criado, ele é retornado 400
+     //quando o fornecedor não consegue ser criado, ele é retornado 400
         proximo(erro)
     }
 })
@@ -43,7 +43,7 @@ roteador.get('/:idFornecedor', async (requisicao, resposta, proximo) => {
         resposta.status(200)
         const serializador = new SerializadorFornecedor(
             resposta.getHeader('Content-Type'),
-            ['email', 'dataCriacao', 'dataAtualizacao', 'versao' ]
+            ['email', 'dataCriacao', 'dataAtualizacao', 'versao']
         )
         resposta.send(
             serializador.serializar(fornecedor)
@@ -87,7 +87,7 @@ const verificarFornecedor = async (requisicao, resposta, proximo) => {
         const id = requisicao.params.idFornecedor
         const fornecedor = new Fornecedor({ id: id })
         await fornecedor.carregar()
-        //coloca valores dentro da requisição express, para que sejam passados para a próxima função
+         //coloca valores dentro da requisição express, para que sejam passados para a próxima função
         requisicao.fornecedor = fornecedor
         proximo()
     } catch (erro) {

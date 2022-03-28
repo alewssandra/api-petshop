@@ -1,5 +1,6 @@
 const Modelo = require('./ModeloTabelaProduto')
 const instancia = require('../../../banco-de-dados')
+const NaoEncontrado = require('../../../erros/NaoEncontrado')
 
 //exporta a função que cria o modelo
 module.exports = {
@@ -11,11 +12,9 @@ module.exports = {
             raw: true
         })
     },
-    
     inserir (dados) {
         return Modelo.create(dados)
     },
-
     remover (idProduto, idFornecedor) {
         return Modelo.destroy({
             where: {
@@ -33,13 +32,13 @@ module.exports = {
             raw: true
         })
 
-        if(!encontrado) {
-            throw new Error('Produto não encontrado')
+        if (!encontrado) {
+            throw new NaoEncontrado('Produto')
         }
 
         return encontrado
     },
-    atualizar(dadosDoProduto, dadosParaAtualizar) {
+    atualizar (dadosDoProduto, dadosParaAtualizar) {
         return Modelo.update(
             dadosParaAtualizar,
             {
@@ -53,7 +52,7 @@ module.exports = {
                 where: {
                     id: idProduto,
                     fornecedor: idFornecedor
-                },
+                }
             })
 
             produto[campo] = quantidade

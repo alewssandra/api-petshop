@@ -35,15 +35,15 @@ app.use('/api/fornecedores', roteador)
 app.use((erro, requisicao, resposta, proximo) => {
     let status = 500
 
-    if(erro instanceof NaoEncontrado) {
+    if (erro instanceof NaoEncontrado) {
         status = 404
-    } 
+    }
 
-    if(erro instanceof CampoInvalido || erro instanceof DadosNaoFornecidos) {
+    if (erro instanceof CampoInvalido || erro instanceof DadosNaoFornecidos) {
         status = 400
     }
 
-    if(erro instanceof ValorNaoSuportado) {
+    if (erro instanceof ValorNaoSuportado) {
         status = 406
     }
 
@@ -53,8 +53,8 @@ app.use((erro, requisicao, resposta, proximo) => {
     resposta.status(status)
     resposta.send(
         serializador.serializar({
-            id: erro.idErro,
-            mensagem: erro.message
+            mensagem: erro.message,
+            id: erro.idErro
         })
     )
 })
