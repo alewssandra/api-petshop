@@ -23,6 +23,11 @@ roteador.post('/', async (requisicao, resposta, proximo) => {
         const serializador = new Serializador(
             resposta.getHeader('Content-Type')
         )
+        //cabeçalho de resposta
+        resposta.set('Etag', produto.versao)
+        const timestamp = (new Date (produto.dataAtualizacao)).getTime()
+        resposta.set('Last-Modified', timestamp)
+        resposta.set('Location', `/api/fornecedores/${produto.fornecedor}/produtos/${produto.id}`)
         resposta.status(201)
         resposta.send(
             serializador.serializar(produto)
@@ -59,7 +64,10 @@ roteador.get('/:id', async (requisicao, resposta, proximo) => {
             ['preco', 'estoque','fornecedor', 'dataCriacao',
              'dataAtualizacao', 'versao']
         )
-
+        //cabeçalho de resposta
+        resposta.set('Etag', produto.versao)
+        const timestamp = (new Date (produto.dataAtualizacao)).getTime()
+        resposta.set('Last-Modified', timestamp)
         resposta.send(
             serializador.serializar(produto)
         )
@@ -81,6 +89,12 @@ roteador.put('/:id', async (requisicao, resposta, proximo) => {
  
      const produto = new Produto(dados)
      await produto.atualizar()
+     await produto.carregar()
+
+     //cabeçalho de resposta
+     resposta.set('Etag', produto.versao)
+     const timestamp = (new Date (produto.dataAtualizacao)).getTime()
+     resposta.set('Last-Modified', timestamp)
      resposta.status(204)
      resposta.end()
    } catch (error) {
@@ -98,6 +112,13 @@ roteador.post('/:id/diminuir-estoque', async (requisicao, resposta, proximo) => 
         await produto.carregar()
         produto.estoque = produto.estoque - requisicao.body.quantidade
         await produto.diminuirEstoque()
+        await produto.carregar()
+
+         //cabeçalho de resposta
+        resposta.set('Etag', produto.versao)
+        const timestamp = (new Date (produto.dataAtualizacao)).getTime()
+        resposta.set('Last-Modified', timestamp)
+       
         resposta.status(204)
         resposta.end()
     } catch (erro) {
