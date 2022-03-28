@@ -4,7 +4,7 @@
 
 ## 💻 Projeto 
 
-Com os cursos de **NodeJS: crie uma API REST padronizada e escalável** e o curso **NodeJS: avançando em APIs REST com controle de versões** da Alura, foi usado a biblioteca express
+Com os cursos de **NodeJS: crie uma API REST padronizada e escalável** e **NodeJS: avançando em APIs REST com controle de versões** da Alura, foi usado a biblioteca express
 para criar a API e a bodyParser para gerenciar o tipo de JSON, conexão com o banco de dados 
 usando Sequelize. E foi criado a classe Serializador para fornecer metodos (json, xml) para
 retornar os dados no formato desejado. E foi utilizado o Postman, para testar a API
