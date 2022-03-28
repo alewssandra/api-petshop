@@ -14,7 +14,8 @@ roteador.get('/', async (requisicao, resposta) => {
     const resultados = await TabelaFornecedor.listar()
     resposta.status(200)
     const serializador = new SerializadorFornecedor(
-        resposta.getHeader('Content-Type')
+        resposta.getHeader('Content-Type'),
+        ['empresa']
     )
     resposta.send(
         serializador.serializar(resultados)
@@ -34,7 +35,8 @@ roteador.post('/', async (requisicao, resposta, proximo) => {
         )
         resposta.send(
         //vai ser transformado em JSON
-            serializador.serializar(fornecedor)
+            serializador.serializar(fornecedor),
+            ['empresa']
         )
     } catch (erro) {
      //quando o fornecedor não consegue ser criado, ele é retornado 400
@@ -57,7 +59,7 @@ roteador.get('/:idFornecedor', async (requisicao, resposta, proximo) => {
         resposta.status(200)
         const serializador = new SerializadorFornecedor(
             resposta.getHeader('Content-Type'),
-            ['email', 'dataCriacao', 'dataAtualizacao', 'versao']
+            ['empresa','email', 'dataCriacao', 'dataAtualizacao', 'versao']
         )
         resposta.send(
             serializador.serializar(fornecedor)
